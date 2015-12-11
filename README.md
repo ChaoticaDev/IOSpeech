@@ -5,4 +5,4 @@ LingoIO-Spanish AdVoice is a software that utilizes Chrome Speech API's, UberSni
 
 https://ubersnip.com/lingoio
 
-(More information coming soon)
+(More information and documentation coming soon)
