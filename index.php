@@ -1,4 +1,6 @@
-<html lang="en" class=" js touch csstransitions"><!--<![endif]--><head>
+<html lang="en" class=" js touch csstransitions" ng-app="app"><!--<![endif]--><head>
+
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular.js"></script>
 		<meta charset="utf-8">
 		<title>Practice spanish conversation | LingoIO | AdVoice</title>
 		<meta name="description" content="Worthy a Bootstrap-based, Responsive HTML5 Template">
@@ -41,6 +43,7 @@
 <meta property="og:title" content="ÜberSnip - AdVoice WebNavigation." />
 <meta property="og:description" content="Learn and practice spanish conversation with speech technologies || #OpenSource" />
 
+	
 	</head>
 
 	<body class="no-trans scroll-spy"><div class="modal fade" id="project-1" tabindex="-1" role="dialog" aria-labelledby="project-1-label" aria-hidden="true">
@@ -419,12 +422,19 @@
 		<!-- ================ -->
 		<div id="banner" class="banner">
 			<div class="banner-image" style="position: relative; z-index: 0; background: none;"><div class="backstretch" style="left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; height: 962px; width: 892px; z-index: -999998; position: absolute;"><img src="images/banner.jpg" style="position: absolute; margin: 0px; padding: 0px; border: none; width: 1452.08px; height: 962px; max-height: none; max-width: none; z-index: -999999; left: -280.038px; top: 0px;"></div></div>
-			<div class="banner-caption">
+			<div class="banner-caption" style="top: 125px;">
 				<div class="container">
 					<div class="row">
 						<div class="col-md-8 col-md-offset-2 object-non-visible" data-animation-effect="fadeIn">
+                        	<div ng-controller="translation_canvas" class="translation_canvas" style="display:none;">
+                            	<div style="display: inline-block; text-align: center;" ng-repeat="lesson in lessons">
+                                {{lesson.lesson_name}} <br />
+                            	<img lesson_id="{{lesson.ID}}" class="lesson_image lesson_{{lesson.ID}}" ng-mouseenter='stylize_lesson( this )' ng-click='renewlesson(this);' ng-mouseleave='unstylize_lesson( this )' src="{{lesson.lesson_image}}" width="100" height="100" style="border: 0px solid black; border-radius: 15px; cursor: pointer;" alt="" />
+                                </div>
+                               
+                            </div>
 							<h1 class="text-center game_header">Conversate in <span>Spanish</span></h1>
-							<p class="lead text-center game_section_text">The first platform that puts your spanish **speaking skills to the test by engaging you in seemingly realistic convesations, requirng spanish responses. This project is #OpenSource, and utilizes UberSnip AdVoice, Google Chrome Speech, and LingoIO Translation <br />PS: <strong>Requires Chrome Web Browser</strong></p>
+							<p class="lead text-center game_section_text">The first platform that puts your spanish **speaking skills to the test by engaging you in seemingly realistic convesations, requirng spanish (voice) responses. This project is #OpenSource, and utilizes UberSnip AdVoice, Google Chrome Speech, and LingoIO Translation <br />PS: <strong>Requires Chrome Web Browser</strong></p>
                             <p><button onClick="next_question();" class="btn btn-primary start_button">Begin</button>
                             
                             <div class="sentence_reccomendation" style="display:none;">
@@ -435,7 +445,8 @@
                             	<strong>Voice Commands</strong>:<br />
                                 'Comenzar' => Restart lesson<br />
                                 'Siguente' => Go to next question<br />
-                                'Reiniciar' => Restart lesson<br />
+                                'Reiniciar' => Restart lesson<br /><br />
+                                <big><a href="https://github.com/UberSnip/IOSpeech" target="new">View on Github</a></big>
                             </p>
 						</div>
 					</div>
@@ -449,6 +460,7 @@
 		
                 
 		<script type="text/javascript" src="plugins/jquery.min.js"></script>
+        
         <script type="text/javascript" src="https://ubersnip.com/themes/sound/js/platform.js"></script> 
         <script type="text/javascript" src="https://ubersnip.com/themes/sound/js/webspeech.js"></script> 
 
@@ -550,6 +562,41 @@
 		}
 </script>
 		
+        
+        <script>
+		
+			var app = angular.module("app", []);
+			app.controller("translation_canvas", function($scope, $http) {
+				$scope.loadlessons = function(){
+					
+					$http({method: "GET", url:"api/getLessons.php"}).then( function successCallback(data){
+						$scope.lessons = data['data'];
+						$(".translation_canvas").fadeIn(500);
+					});
+				};
+				
+				$scope.stylize_lesson = function ( msg, $event ){
+					$(event.target).css("width", 150);
+				};
+				
+				$scope.unstylize_lesson = function ( msg, $event ){
+					$(event.target).css("width", 100);
+				};
+				
+				$scope.renewlesson = function (msg, $event){
+						alert($(event.target).attr("lesson_id"));
+					$.get("https://ubersnip.com/UberSnip_VoiceAPI/LingoIO/api/lessonData.php?lesson_id=" + $(event.target).attr("lesson_id"), function(data){
+						questions = data;
+						restart_lesson();
+					});	
+				}
+				
+				$scope.lessons = [];
+				
+				$scope.loadlessons();
+			});
+		
+		</script>
 		
 		
 		<!-- footer end -->
