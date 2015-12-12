@@ -14,7 +14,7 @@
 		array_push ( $possibles, $row );
 		$TCMD = new COMMAND_CENTRAL();
 		$TCMD->command_format = $row['response_text'];
-		$TCMD->command_response = "{\"correct\":true}";
+		$TCMD->command_response = "{\"correct\":true, \"success_text\": \"".$row['success_text']."\", \"failure_text\": \"".$row['failure_text']."\"}";
 		$CMD[$index] = $TCMD;
 		$index++;
 	}

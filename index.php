@@ -427,6 +427,10 @@
 							<p class="lead text-center game_section_text">The first platform that puts your spanish **speaking skills to the test by engaging you in seemingly realistic convesations, requirng spanish responses. This project is #OpenSource, and utilizes UberSnip AdVoice, Google Chrome Speech, and LingoIO Translation <br />PS: <strong>Requires Chrome Web Browser</strong></p>
                             <p><button onClick="next_question();" class="btn btn-primary start_button">Begin</button>
                             
+                            <div class="sentence_reccomendation" style="display:none;">
+                            	<input type="text" />
+                            </div>
+                                                        
                             <p style="text-align:left;">
                             	<strong>Voice Commands</strong>:<br />
                                 'Comenzar' => Restart lesson<br />
@@ -526,7 +530,7 @@
 			$(".game_section_text").html("Grading response...");
 			$.get("api/request.php", {sentence_id:questions[question_index].ID, req: answer }).done(function(data){
 				data=JSON.parse(data);
-				$(".game_section_text").html(data.correct == 1 ? "<font color='green'><strong>Great Job!</strong> Correct</font>" : "<font color='red'><strong>Uh oh!</strong> Wrong</font>");
+				$(".game_section_text").html(data.correct == 1 ? data.success_text : data.failure_text);
 				
 				
 				if(data.correct){
